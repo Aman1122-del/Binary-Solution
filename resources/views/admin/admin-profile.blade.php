@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
@@ -124,8 +125,8 @@
                         <!-- Left Profile Card -->
                         <div class="col-xl-4">
                             <div class="profile-card text-center">
-                                <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('assets/img/profile-img.jpg') }}"
-                                    alt="Profile" class="img-fluid" width="150">
+                                <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('assets/img/profile-img.jpg') }}" alt="Profile" class="img-fluid"
+                                    width="150">
                                 <h4 class="name">{{ $user->name }}</h4>
                                 <p>{{ $user->job ?? 'No Job Title' }}</p>
                                 <div class="social-links">
@@ -156,38 +157,31 @@
                                     </li>
                                 </ul>
                                 {{-- Success Message --}}
+                                @if (session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        {{ session('success') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                @endif
 
                                 {{-- Error Message --}}
 
                                 {{-- Validation Errors --}}
+                                @if ($errors->any())
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <ul class="mb-0">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                @endif
+
 
                                 <div class="tab-content pt-2">
-
                                     <!-- Overview -->
                                     <div class="tab-pane fade show active" id="tab-overview">
-                                        @if (session('success'))
-                                            <div id="success-alert"
-                                                class="alert alert-success alert-dismissible fade show" role="alert">
-                                                {{ session('success') }}
-                                            </div>
-
-                                            <script>
-                                                // 4 seconds (4000 ms) baad alert hide ho jaye aur DOM se remove bhi ho jaye
-                                                setTimeout(function() {
-                                                    let alertBox = document.getElementById("success-alert");
-                                                    if (alertBox) {
-                                                        alertBox.classList.add("fade"); // Bootstrap fade effect
-                                                        alertBox.classList.remove("show");
-
-                                                        // Thoda delay dekar DOM se remove kar dena
-                                                        setTimeout(() => {
-                                                            alertBox.remove();
-                                                        }, 500); // 0.5 sec fade-out ke liye
-                                                    }
-                                                }, 3000);
-                                            </script>
-                                        @endif
-
                                         <h5 class="card-title">About</h5>
                                         <p class="small fst-italic">
                                             {{ $user->about ?? 'No description added yet.' }}
@@ -227,102 +221,151 @@
                                     <!-- Edit Profile -->
 
                                     <!-- Edit Profile Tab -->
-                                   <div class="tab-pane fade" id="tab-edit-profile">
+                                    <div class="tab-pane fade" id="tab-edit-profile">
 
-    <div class="row mb-3">
-        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-        <div class="col-md-8 col-lg-9">
-            <img src="{{ $student->profile_image ? asset('storage/' . $student->profile_image) : asset('assets/img/profile-img.jpg') }}"
-                 alt="Profile" width="120" class="rounded-circle">
+                                        {{-- Success Message --}}
+                                        @if (session('success'))
+                                            <div class="alert alert-success alert-dismissible fade show"
+                                                role="alert">
+                                                {{ session('success') }}
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="alert"></button>
+                                            </div>
+                                        @endif
 
-            <div class="pt-2">
-                <!-- Upload Form (separate) -->
-                <form action="{{ route('student.update_profile_image') }}" method="POST" enctype="multipart/form-data" style="display:inline;">
-                    @csrf
-                    <label class="btn btn-primary btn-sm mb-0" title="Upload new profile image">
-                        <i class="bi bi-upload"></i>
-                        <input type="file" name="profile_image" class="d-none" onchange="this.form.submit()">
-                    </label>
-                </form>
+                                        {{-- Error Message --}}
+                                        @if (session('error'))
+                                            <div class="alert alert-danger alert-dismissible fade show"
+                                                role="alert">
+                                                {{ session('error') }}
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="alert"></button>
+                                            </div>
+                                        @endif
 
-                <!-- Delete Form -->
-                @if ($student->profile_image)
-                    <form action="{{ route('student.delete_profile_image') }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" title="Remove my profile image">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </form>
-                @endif
-            </div>
-        </div>
-    </div>
+                                        {{-- Validation Errors --}}
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger alert-dismissible fade show"
+                                                role="alert">
+                                                <ul class="mb-0">
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="alert"></button>
+                                            </div>
+                                        @endif
 
-    <!-- Main Profile Update Form -->
-    <form method="POST" action="{{ route('student.update_profile') }}">
-        @csrf
+                                        <div class="row mb-3">
+                                            <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile
+                                                Image</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('assets/img/profile-img.jpg') }}"
+                                                    alt="Profile" width="120" class="rounded-circle">
 
-        <div class="mb-3 row">
-            <label class="col-md-4 col-lg-3 col-form-label">Full Name</label>
-            <div class="col-md-8 col-lg-9">
-                <input type="text" name="full_name" class="form-control"
-                       value="{{ old('full_name', $student->full_name) }}">
-            </div>
-        </div>
+                                                <div class="pt-2">
+                                                    <!-- Upload Form (separate) -->
+                                                    <form action="{{ route('admin_update_profile_image') }}"
+                                                        method="POST" enctype="multipart/form-data"
+                                                        style="display:inline;">
+                                                        @csrf
+                                                        <label class="btn btn-primary btn-sm mb-0"
+                                                            title="Upload new profile image">
+                                                            <i class="bi bi-upload"></i>
+                                                            <input type="file" name="profile_image" class="d-none"
+                                                                onchange="this.form.submit()">
+                                                        </label>
+                                                    </form>
 
-        <div class="mb-3 row">
-            <label class="col-md-4 col-lg-3 col-form-label">University</label>
-            <div class="col-md-8 col-lg-9">
-                <input type="text" name="university" class="form-control"
-                       value="{{ old('university', $student->university) }}">
-            </div>
-        </div>
+                                                    <!-- Delete Form -->
+                                                    @if ($user->profile_image)
+                                                        <form action="{{ route('admin_delete_profile_image') }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                                title="Remove my profile image">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
 
-        <div class="mb-3 row">
-            <label class="col-md-4 col-lg-3 col-form-label">Country</label>
-            <div class="col-md-8 col-lg-9">
-                <input type="text" name="country" class="form-control"
-                       value="{{ old('country', $student->country) }}">
-            </div>
-        </div>
+                                        <!-- Main Profile Update Form -->
+                                        <form method="POST" action="{{ route('admin_update') }}">
+                                            @csrf
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" name="name" class="form-control"
+                                                        value="{{ old('name', $user->name) }}">
+                                                </div>
+                                            </div>
 
-        <div class="mb-3 row">
-            <label class="col-md-4 col-lg-3 col-form-label">Address</label>
-            <div class="col-md-8 col-lg-9">
-                <input type="text" name="address" class="form-control"
-                       value="{{ old('address', $student->address) }}">
-            </div>
-        </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Company</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" name="company" class="form-control"
+                                                        value="{{ old('company', $user->company) }}">
+                                                </div>
+                                            </div>
 
-        <div class="mb-3 row">
-            <label class="col-md-4 col-lg-3 col-form-label">Phone</label>
-            <div class="col-md-8 col-lg-9">
-                <input type="text" name="contact_no" class="form-control"
-                       value="{{ old('contact_no', $student->contact_no) }}">
-            </div>
-        </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Job</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" name="job" class="form-control"
+                                                        value="{{ old('job', $user->job) }}">
+                                                </div>
+                                            </div>
 
-        <div class="mb-3 row">
-            <label class="col-md-4 col-lg-3 col-form-label">Email</label>
-            <div class="col-md-8 col-lg-9">
-                <input type="email" name="email" class="form-control"
-                       value="{{ old('email', $student->email) }}">
-            </div>
-        </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Country</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" name="country" class="form-control"
+                                                        value="{{ old('country', $user->country) }}">
+                                                </div>
+                                            </div>
 
-        <div class="mb-3 row">
-            <label class="col-md-4 col-lg-3 col-form-label">About</label>
-            <div class="col-md-8 col-lg-9">
-                <textarea name="about" class="form-control" rows="3">{{ old('about', $student->about) }}</textarea>
-            </div>
-        </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Address</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" name="address" class="form-control"
+                                                        value="{{ old('address', $user->address) }}">
+                                                </div>
+                                            </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-    </form>
-</div>
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" name="phone" class="form-control"
+                                                        value="{{ old('phone', $user->phone) }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="email" name="email" class="form-control"
+                                                        value="{{ old('email', $user->email) }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 row">
+                                                <label class="col-md-4 col-lg-3 col-form-label">About</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <textarea name="about" class="form-control" rows="3">{{ old('about', $user->about) }}</textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
 
 
                                     <!-- Change Password -->
