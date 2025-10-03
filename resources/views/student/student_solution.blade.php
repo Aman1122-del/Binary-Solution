@@ -172,7 +172,8 @@
                                                             {{-- Source Code always available --}}
                                                             <div class="d-flex align-items-center mb-1">
                                                                 {!! $addonIcons['source_code'] !!}
-                                                                <a href="{{ asset($solution->source_code_path) }}"
+                                                                <a style="padding: 5px 19px;"
+                                                                    href="{{ asset($solution->source_code_path) }}"
                                                                     class="btn btn-sm btn-primary ml-2" download>
                                                                     Download Source Code
                                                                 </a>
@@ -182,8 +183,9 @@
                                                             @if (in_array('video_demo', $addons) && $solution->video_demo_path)
                                                                 <div class="d-flex align-items-center mb-1">
                                                                     {!! $addonIcons['video_demo'] !!}
-                                                                    <a href="{{ asset($solution->video_demo_path) }}"
-                                                                        class="btn btn-sm btn-info ml-2" download>
+                                                                    <a style="padding: 5px 64px; margin-left: 13px !important;"
+                                                                        href="{{ asset($solution->video_demo_path) }}"
+                                                                        class="btn btn-sm btn-info " download>
                                                                         Video Demo
                                                                     </a>
                                                                 </div>
