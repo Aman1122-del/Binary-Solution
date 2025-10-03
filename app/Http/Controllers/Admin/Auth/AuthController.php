@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -65,7 +66,9 @@ class AuthController extends Controller
         return back()->with('success', 'Profile updated successfully!');
     }
 
-  public function updateProfileImage(Request $request)
+
+
+public function updateProfileImage(Request $request)
 {
     $user = Auth::user();
 
@@ -73,14 +76,9 @@ class AuthController extends Controller
         'profile_image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    // Ensure storage link exists
-    if (!file_exists(public_path('storage'))) {
-        \Artisan::call('storage:link');
-    }
-
-    // Delete old image if exists
-    if ($user->profile_image && file_exists(public_path('storage/' . $user->profile_image))) {
-        unlink(public_path('storage/' . $user->profile_image));
+    // Delete old image safely
+    if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+        Storage::disk('public')->delete($user->profile_image);
     }
 
     // Generate unique file name
@@ -89,7 +87,7 @@ class AuthController extends Controller
     // Store in storage/app/public/uploads/profile
     $path = $request->file('profile_image')->storeAs('uploads/profile', $filename, 'public');
 
-    // Save only relative path (without "storage/")
+    // Save relative path
     $user->update([
         'profile_image' => $path
     ]);
@@ -97,12 +95,12 @@ class AuthController extends Controller
     return back()->with('success', 'Profile image updated successfully!');
 }
 
- public function deleteProfileImage(Request $request)
+public function deleteProfileImage()
 {
     $user = Auth::user();
 
-    if ($user->profile_image && file_exists(public_path('storage/' . $user->profile_image))) {
-        unlink(public_path('storage/' . $user->profile_image));
+    if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+        Storage::disk('public')->delete($user->profile_image);
     }
 
     $user->update(['profile_image' => null]);

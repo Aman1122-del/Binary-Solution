@@ -125,8 +125,8 @@
                         <!-- Left Profile Card -->
                         <div class="col-xl-4">
                             <div class="profile-card text-center">
-                                <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('assets/img/profile-img.jpg') }}" alt="Profile" class="img-fluid"
-                                    width="150">
+                                <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('assets/img/profile-img.jpg') }}"
+                                    alt="Profile" class="img-fluid" width="150">
                                 <h4 class="name">{{ $user->name }}</h4>
                                 <p>{{ $user->job ?? 'No Job Title' }}</p>
                                 <div class="social-links">
@@ -157,12 +157,6 @@
                                     </li>
                                 </ul>
                                 {{-- Success Message --}}
-                                @if (session('success'))
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        {{ session('success') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                    </div>
-                                @endif
 
                                 {{-- Error Message --}}
 
@@ -182,6 +176,11 @@
                                 <div class="tab-content pt-2">
                                     <!-- Overview -->
                                     <div class="tab-pane fade show active" id="tab-overview">
+                                        @if (session('success'))
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                {{ session('success') }}
+                                            </div>
+                                        @endif
                                         <h5 class="card-title">About</h5>
                                         <p class="small fst-italic">
                                             {{ $user->about ?? 'No description added yet.' }}
@@ -224,24 +223,10 @@
                                     <div class="tab-pane fade" id="tab-edit-profile">
 
                                         {{-- Success Message --}}
-                                        @if (session('success'))
-                                            <div class="alert alert-success alert-dismissible fade show"
-                                                role="alert">
-                                                {{ session('success') }}
-                                                <button type="button" class="btn-close"
-                                                    data-bs-dismiss="alert"></button>
-                                            </div>
-                                        @endif
+
 
                                         {{-- Error Message --}}
-                                        @if (session('error'))
-                                            <div class="alert alert-danger alert-dismissible fade show"
-                                                role="alert">
-                                                {{ session('error') }}
-                                                <button type="button" class="btn-close"
-                                                    data-bs-dismiss="alert"></button>
-                                            </div>
-                                        @endif
+
 
                                         {{-- Validation Errors --}}
                                         @if ($errors->any())
@@ -261,7 +246,7 @@
                                             <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile
                                                 Image</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('assets/img/profile-img.jpg') }}"
+                                                <img src="{{ $user->profile_image ? Storage::url($user->profile_image) : asset('assets/img/profile-img.jpg') }}"
                                                     alt="Profile" width="120" class="rounded-circle">
 
                                                 <div class="pt-2">

@@ -77,7 +77,10 @@
                       </div>
                   @endif
 
-                  <a href="#" class="bg-btn">Enroll Now <i class="fa-solid fa-arrow-right-long"></i></a>
+
+                          @unless (Auth::guard('student')->check() || Route::is('login') || Route::is('register'))
+                  <a href="/register" class="bg-btn">Enroll Now <i class="fa-solid fa-arrow-right-long"></i></a>
+                   @endunless
                   <div class="header__hamburger d-xl-none my-auto">
                       <div class="sidebar__toggle">
                           <i class="fa-solid fa-bars"></i>
